@@ -1,0 +1,16 @@
+version: "3.6"
+services:
+  calibre:
+    image: lscr.io/linuxserver/calibre:latest
+    container_name: calibre
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Berlin
+    volumes:
+      - /media/Manga/:/config
+    ports:
+      - 8080:8080
+      - 8181:8181
+      - 8081:8081

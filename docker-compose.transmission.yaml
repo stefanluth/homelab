@@ -1,0 +1,31 @@
+version: "3.6"
+services:
+  transmission-openvpn:
+    container_name: transmission-openvpn
+    image: haugene/transmission-openvpn
+    network_mode: host
+    restart: always
+    cap_add:
+      - NET_ADMIN
+    volumes:
+      - "/home/homelab/openvpn/openvpn-credentials.txt:/config/openvpn-credentials.txt"
+      - "/home/homelab/openvpn/config:/config"
+      - "/media/Downloads/:/data"
+    environment:
+      - OPENVPN_PROVIDER=NORDVPN
+      - OPENVPN_CONFIG=netherlands
+      - OPENVPN_USERNAME=**None**
+      - OPENVPN_PASSWORD=**None**
+      - LOCAL_NETWORK=192.168.0.0/16
+      - NORDVPN_COUNTRY=NL
+      - NORDVPN_CATEGORY=europe
+      - NORDVPN_PROTOCOL=udp
+      - TRANSMISSION_SPEED_LIMIT_UP=0
+      - TRANSMISSION_SPEED_LIMIT_UP_ENABLED=true
+      - TRANSMISSION_RATIO_LIMIT=0
+      - TRANSMISSION_RATIO_LIMIT_ENABLED=true
+      - TRANSMISSION_DOWNLOAD_QUEUE_ENABLED=false
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
