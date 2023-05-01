@@ -8,8 +8,8 @@ services:
     cap_add:
       - NET_ADMIN
     volumes:
-      - "/home/homelab/openvpn/openvpn-credentials.txt:/config/openvpn-credentials.txt"
-      - "/home/homelab/openvpn/config:/config"
+      - "/home/stefan/openvpn/openvpn-credentials.txt:/config/openvpn-credentials.txt"
+      - "/home/stefan/openvpn/config:/config"
       - "/media/Downloads/:/data"
     environment:
       - OPENVPN_PROVIDER=NORDVPN
