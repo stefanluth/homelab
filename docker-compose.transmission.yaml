@@ -3,23 +3,20 @@ services:
   transmission-openvpn:
     container_name: transmission-openvpn
     image: haugene/transmission-openvpn
-    network_mode: host
+    ports:
+      - "9091:9091"
     restart: always
     cap_add:
       - NET_ADMIN
+    secrets:
+      - openvpn_credentials
     volumes:
-      - "/home/stefan/openvpn/openvpn-credentials.txt:/config/openvpn-credentials.txt"
       - "/home/stefan/openvpn/config:/config"
       - "/media/Downloads/:/data"
     environment:
-      - OPENVPN_PROVIDER=NORDVPN
-      - OPENVPN_CONFIG=netherlands
-      - OPENVPN_USERNAME=**None**
-      - OPENVPN_PASSWORD=**None**
+      - OPENVPN_PROVIDER=SURFSHARK
+      - OPENVPN_CONFIG=de-fra.prod.surfshark.com_udp
       - LOCAL_NETWORK=192.168.0.0/16
-      - NORDVPN_COUNTRY=NL
-      - NORDVPN_CATEGORY=europe
-      - NORDVPN_PROTOCOL=udp
       - TRANSMISSION_SPEED_LIMIT_UP=0
       - TRANSMISSION_SPEED_LIMIT_UP_ENABLED=true
       - TRANSMISSION_RATIO_LIMIT=0
@@ -29,3 +26,7 @@ services:
       driver: json-file
       options:
         max-size: 10m
+
+secrets:
+  openvpn_credentials:
+    file: /home/stefan/openvpn/openvpn-credentials.txt
