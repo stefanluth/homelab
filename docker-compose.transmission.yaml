@@ -14,8 +14,8 @@ services:
       - "/home/stefan/openvpn/config:/config"
       - "/media/Downloads/:/data"
     environment:
-      - OPENVPN_PROVIDER=SURFSHARK
-      - OPENVPN_CONFIG=de-fra.prod.surfshark.com_udp
+      - OPENVPN_PROVIDER=PROTONVPN
+      - OPENVPN_CONFIG=nl.protonvpn.net.udp,ch.protonvpn.net.udp
       - LOCAL_NETWORK=192.168.0.0/16
       - TRANSMISSION_SPEED_LIMIT_UP=0
       - TRANSMISSION_SPEED_LIMIT_UP_ENABLED=true
@@ -29,4 +29,4 @@ services:
 
 secrets:
   openvpn_credentials:
-    file: /home/stefan/openvpn/openvpn-credentials.txt
+    file: /home/stefan/openvpn/config/openvpn-credentials.txt
