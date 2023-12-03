@@ -1,32 +1,33 @@
 version: "3.6"
 services:
-  transmission-openvpn:
-    container_name: transmission-openvpn
-    image: haugene/transmission-openvpn
-    ports:
-      - "9091:9091"
-    restart: always
+  wireguard:
+    image: lscr.io/linuxserver/wireguard:latest
     cap_add:
       - NET_ADMIN
-    secrets:
-      - openvpn_credentials
-    volumes:
-      - "/home/stefan/openvpn/config:/config"
-      - "/media/Downloads/:/data"
+      - SYS_MODULE
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=0
+      - net.ipv4.conf.all.src_valid_mark=1
     environment:
-      - OPENVPN_PROVIDER=PROTONVPN
-      - OPENVPN_CONFIG=nl.protonvpn.net.udp,ch.protonvpn.net.udp
-      - LOCAL_NETWORK=192.168.0.0/16
-      - TRANSMISSION_SPEED_LIMIT_UP=0
-      - TRANSMISSION_SPEED_LIMIT_UP_ENABLED=true
-      - TRANSMISSION_RATIO_LIMIT=0
-      - TRANSMISSION_RATIO_LIMIT_ENABLED=true
-      - TRANSMISSION_DOWNLOAD_QUEUE_ENABLED=false
-    logging:
-      driver: json-file
-      options:
-        max-size: 10m
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Berlin
+    ports:
+      - "9091:9091/tcp"
+    volumes:
+      - "/home/stefan/wireguard:/config/wg_confs"
+    restart: always
 
-secrets:
-  openvpn_credentials:
-    file: /home/stefan/openvpn/config/openvpn-credentials.txt
+  transmission:
+    image: lscr.io/linuxserver/transmission:latest
+    network_mode: "service:wireguard"
+    depends_on:
+      - wireguard
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Berlin
+    volumes:
+      - "/home/stefan/transmission:/config"
+      - "/media/Downloads/:/downloads"
+    restart: always
